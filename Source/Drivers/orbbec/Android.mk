@@ -43,7 +43,7 @@ LOCAL_C_INCLUDES := \
 
 # Dependencies
 LOCAL_STATIC_LIBRARIES := XnLib DepthUtils
-LOCAL_SHARED_LIBRARIES := libusb
+LOCAL_SHARED_LIBRARIES := libusb1.0
 
 ifdef PS_OS_BUILD
     LOCAL_SHARED_LIBRARIES += libjpeg
