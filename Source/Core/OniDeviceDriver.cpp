@@ -175,4 +175,10 @@ void DeviceDriver::disableFrameSync(void* frameSyncGroup)
 	m_driverHandler.disableFrameSync(frameSyncGroup);
 }
 
+#ifdef ANDROID
+void DeviceDriver::registerAndroidDevice(unsigned short vendorID, unsigned short productID, int fd, const char *devicePath) {
+	m_driverHandler.registerAndroidDevice(vendorID, productID, fd, devicePath);
+}
+#endif
+
 ONI_NAMESPACE_IMPLEMENTATION_END

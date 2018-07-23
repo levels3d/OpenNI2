@@ -51,6 +51,8 @@ public:
 
 	void ClearDevice(const char* uri);
 
+	virtual OniStatus tryDevice(const char *string);
+
 protected:
 	static void XN_CALLBACK_TYPE OnDevicePropertyChanged(const XnChar* ModuleName, XnUInt32 nPropertyId, void* pCookie);
 	static void XN_CALLBACK_TYPE OnDeviceConnected(const OniDeviceInfo& deviceInfo, void* pCookie);

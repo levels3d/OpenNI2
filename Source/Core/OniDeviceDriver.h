@@ -58,6 +58,10 @@ public:
 	void* enableFrameSync(VideoStream** pStreams, int streamCount);
 	void disableFrameSync(void* frameSyncGroup);
 
+#ifdef ANDROID
+	void registerAndroidDevice(unsigned short vendorID, unsigned short productID, int fd, const char* devicePath);
+#endif
+
 protected:
 	static void ONI_CALLBACK_TYPE driver_DeviceConnected(const OniDeviceInfo* pInfo, void* pCookie);
 	static void ONI_CALLBACK_TYPE driver_DeviceDisconnected(const OniDeviceInfo* pInfo, void* pCookie);

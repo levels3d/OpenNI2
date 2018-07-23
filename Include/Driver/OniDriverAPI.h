@@ -27,6 +27,10 @@
 #include "OniDriverTypes.h"
 #include <stdarg.h>
 
+#ifdef ANDROID
+#include <XnUSB.h>
+#endif
+
 namespace oni { namespace driver {
 
 class DeviceBase;
@@ -187,6 +191,12 @@ public:
 	virtual void* enableFrameSync(StreamBase** /*pStreams*/, int /*streamCount*/) { return NULL; }
 	virtual void disableFrameSync(void* /*frameSyncGroup*/) {}
 
+#ifdef ANDROID
+	virtual void registerAndroidDevice(unsigned short vendorID, unsigned short productID, int fd, const char* devicePath) {
+        xnAndroidUSBDeviceConnected(vendorID, productID, fd, devicePath);
+	}
+#endif
+
 protected:
 	void deviceConnected(const OniDeviceInfo* pInfo) { (m_deviceConnectedEvent)(pInfo, m_pCookie); }
 	void deviceDisconnected(const OniDeviceInfo* pInfo) { (m_deviceDisconnectedEvent)(pInfo, m_pCookie); }
@@ -205,7 +215,7 @@ private:
 
 }} // oni::driver
 
-#define ONI_EXPORT_DRIVER(DriverClass)																						\
+#define _ONI_EXPORT_DRIVER_BASE(DriverClass, Extra)																			\
 																															\
 oni::driver::DriverBase* g_pDriver = NULL;																					\
 																															\
@@ -374,5 +384,17 @@ ONI_C_API_EXPORT void oniDriverDisableFrameSync(void* frameSyncGroup)											
 {																															\
 	return g_pDriver->disableFrameSync(frameSyncGroup);																		\
 }																															\
+Extra																														\
+
+#ifdef ANDROID
+#define ONI_EXPORT_DRIVER(DriverClass) _ONI_EXPORT_DRIVER_BASE(DriverClass,													\
+ONI_C_API_EXPORT void oniDriverRegisterAndroidDevice(unsigned short vendorID, unsigned short productID, int fd, const char* devicePath) \
+{																															\
+	return g_pDriver->registerAndroidDevice(vendorID, productID, fd, devicePath);											\
+}																															\
+)
+#else
+#define ONI_EXPORT_DRIVER(DriverClass) _ONI_EXPORT_DRIVER_BASE(DriverClass,)
+#endif
 
 #endif // ONIDRIVERAPI_H

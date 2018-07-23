@@ -495,6 +495,12 @@ ONI_C_API OniStatus oniSetLogAndroidOutput(OniBool bAndroidOutput)
 
 	return ONI_STATUS_OK;
 }
+
+ONI_C_API OniStatus oniRegisterAndroidDevice(unsigned short vendorID, unsigned short productID, int fd, const char* devicePath)
+{
+	g_Context.registerAndroidDevice(vendorID, productID, fd, devicePath);
+	return ONI_STATUS_OK;
+}
 #endif
 ONI_C_API OniStatus oniCoordinateConverterDepthToWorld(OniStreamHandle depthStream, float depthX, float depthY, float depthZ, float* pWorldX, float* pWorldY, float* pWorldZ)
 {

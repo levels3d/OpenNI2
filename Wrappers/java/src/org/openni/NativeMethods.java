@@ -224,4 +224,6 @@ class NativeMethods {
 	static native int oniSetLogFileOutput(boolean bConsoleOutput);
 
 	static native int oniSetLogAndroidOutput(boolean bConsoleOutput);
+
+	static native int oniRegisterAndroidDevice(int vendorID, int productID, int fd, String devicePath);
 }

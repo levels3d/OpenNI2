@@ -20,9 +20,17 @@
 *****************************************************************************/
 package org.openni;
 
+import android.content.Context;
+import android.hardware.usb.UsbDevice;
+import android.hardware.usb.UsbDeviceConnection;
+import android.hardware.usb.UsbManager;
+import android.util.Log;
+
+import java.util.HashMap;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.Map;
 import java.util.concurrent.TimeoutException;
 
 /**
@@ -172,10 +180,46 @@ public class OpenNI {
 	 * 
 	 * @return deviceInfoList An array to be filled with devices.
 	 */
-	public static List<DeviceInfo> enumerateDevices() {
-		List<DeviceInfo> devices = new ArrayList<DeviceInfo>();
-		NativeMethods.checkReturnStatus(NativeMethods.oniGetDeviceList(devices));
+	public static List<DeviceInfo> enumerateDevices(final Context context) {
+		List<DeviceInfo> devices = new ArrayList<>();
+		// NativeMethods.oniGetDeviceList();
+
+		final UsbManager manager = (UsbManager) context.getSystemService(Context.USB_SERVICE);
+		if(manager != null) {
+			final HashMap<String, UsbDevice> list = manager.getDeviceList();
+			if (list != null) {
+				for (final Map.Entry<String, UsbDevice> entry : list.entrySet()) {
+					final UsbDevice device = entry.getValue();
+					devices.add(new DeviceInfo(
+						getDeviceUri(device),
+						device.getManufacturerName(),
+						device.getProductName(),
+						device.getVendorId(),
+						device.getProductId()
+					));
+				}
+			}
+		}
+
 		return devices;
+	}
+
+	public static void registerDevice(final UsbDevice device, final UsbDeviceConnection connection) {
+		NativeMethods.checkReturnStatus(
+			NativeMethods.oniRegisterAndroidDevice(
+				device.getVendorId(),
+				device.getProductId(),
+				connection.getFileDescriptor(),
+				getDeviceUri(device)
+			)
+		);
+	}
+
+	private static String getDeviceUri(final UsbDevice device) {
+		return device.getDeviceName().replace(
+			"/dev/bus/usb/",
+			String.format("%x/%x@", device.getVendorId(), device.getProductId())
+		);
 	}
 
 	/**

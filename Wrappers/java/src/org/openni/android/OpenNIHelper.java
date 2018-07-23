@@ -27,12 +27,14 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 
+import android.app.NativeActivity;
 import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.hardware.usb.UsbDevice;
+import android.hardware.usb.UsbDeviceConnection;
 import android.hardware.usb.UsbManager;
 import android.util.Log;
 
@@ -51,7 +53,7 @@ import org.openni.OpenNI;
  */
 public class OpenNIHelper {
 	static {
-		System.loadLibrary("usb");
+		System.loadLibrary("usb1.0");
 		System.loadLibrary("OpenNI2");
 		System.loadLibrary("OpenNI2.jni");
 	}
@@ -142,7 +144,7 @@ public class OpenNIHelper {
 
 	public UsbDevice getUsbDevice(String uri) {
 		// look for this uri in OpenNI to get its device info
-		List<DeviceInfo> devices = OpenNI.enumerateDevices();
+		List<DeviceInfo> devices = OpenNI.enumerateDevices(mAndroidContext);
 		Iterator<DeviceInfo> iterator = devices.iterator();
 		while (iterator.hasNext()) {
 			DeviceInfo deviceInfo = iterator.next();
@@ -199,7 +201,9 @@ public class OpenNIHelper {
 					if (intent.getBooleanExtra(UsbManager.EXTRA_PERMISSION_GRANTED, false)) {
 						// permission granted. open the device
 						try {
-							((UsbManager) mAndroidContext.getSystemService(Context.USB_SERVICE)).openDevice(device);
+							final UsbManager manager = (UsbManager) mAndroidContext.getSystemService(Context.USB_SERVICE);
+							final UsbDeviceConnection connection = manager.openDevice(device);
+							OpenNI.registerDevice(device, connection);
 							openDevice(mUri);
 						} catch (Exception ex) {
 							Log.e(TAG, "Can't open device though permission was granted: " + ex);

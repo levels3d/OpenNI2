@@ -88,6 +88,10 @@ struct Funcs
 
 	void* (ONI_C_DECL* oniDriverEnableFrameSync)(void** pStreamHandles, int streamCount);
 	void (ONI_C_DECL* oniDriverDisableFrameSync)(void* frameSyncGroup);
+
+#ifdef ANDROID
+	void (ONI_C_DECL* oniDriverRegisterAndroidDevice)(unsigned short vendorID, unsigned short productID, int fd, const char* devicePath);
+#endif
 };
 
 
@@ -245,6 +249,12 @@ public:
 	{
 		return (*funcs.oniDriverDisableFrameSync)(frameSyncGroup);
 	}
+
+#ifdef ANDROID
+    void registerAndroidDevice(unsigned short vendorID, unsigned short productID, int fd, const char *devicePath) const {
+		return (*funcs.oniDriverRegisterAndroidDevice)(vendorID, productID, fd, devicePath);
+	}
+#endif
 
 private:
 	Funcs funcs;

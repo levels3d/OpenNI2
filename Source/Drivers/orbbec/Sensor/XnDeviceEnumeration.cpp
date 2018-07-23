@@ -73,7 +73,7 @@ XnStatus XnDeviceEnumeration::Initialize()
     XN_IS_STATUS_OK(nRetVal);
 
     const XnUSBConnectionString* astrDevicePaths;
-    XnUInt32 nCount;
+    XnUInt32 nCount = 0;
 
     // check all products
     for (XnUInt32 i = 0; i < ms_supportedProductsCount; ++i)

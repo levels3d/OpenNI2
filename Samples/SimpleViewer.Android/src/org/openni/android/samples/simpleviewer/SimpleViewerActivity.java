@@ -91,7 +91,7 @@ public class SimpleViewerActivity
 		// Request opening the first OpenNI-compliant device found
 		String uri;
 		
-		List<DeviceInfo> devices = OpenNI.enumerateDevices();
+		List<DeviceInfo> devices = OpenNI.enumerateDevices(this);
 		if (devices.isEmpty()) {
 			showAlertAndExit("No OpenNI-compliant device found.");
 			return;

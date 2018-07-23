@@ -1190,4 +1190,12 @@ XN_EVENT_HANDLE Context::getThreadEvent()
 	return hEvent;
 }
 
+#ifdef ANDROID
+void Context::registerAndroidDevice(unsigned short vendorID, unsigned short productID, int fd, const char *devicePath) {
+    for (xnl::List<DeviceDriver*>::Iterator iter = m_deviceDrivers.Begin(); iter != m_deviceDrivers.End(); ++iter) {
+        (*iter)->registerAndroidDevice(vendorID, productID, fd, devicePath);
+    }
+}
+#endif
+
 ONI_NAMESPACE_IMPLEMENTATION_END

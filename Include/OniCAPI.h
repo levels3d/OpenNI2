@@ -255,5 +255,7 @@ ONI_C_API OniStatus oniSetLogFileOutput(OniBool bFileOutput);
  * @retval ONI_STATUS_ERROR Upon any kind of failure.
  */
 ONI_C_API OniStatus oniSetLogAndroidOutput(OniBool bAndroidOutput);
+
+ONI_C_API OniStatus oniRegisterAndroidDevice(unsigned short vendorID, unsigned short productID, int fd, const char* devicePath);
 #endif
 #endif // ONICAPI_H

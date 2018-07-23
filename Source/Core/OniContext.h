@@ -107,6 +107,11 @@ public:
     OniStatus recorderClose(Recorder* pRecorder);
 
 	static OniBool s_valid;
+
+#ifdef ANDROID
+    void registerAndroidDevice(unsigned short vendorID, unsigned short productID, int fd, const char *devicePath);
+#endif
+
 protected:
 	OniStatus streamDestroy(VideoStream* pStream);
 	static void ONI_CALLBACK_TYPE deviceDriver_DeviceConnected(Device* pDevice, void* pCookie);

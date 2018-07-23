@@ -124,4 +124,8 @@ XN_C_API XnStatus XN_API_DEPRECATED("Use xnUSBRegisterToConnectivityEvents() ins
 XN_C_API XnStatus XN_C_DECL xnUSBRegisterToConnectivityEvents(XnUInt16 nVendorID, XnUInt16 nProductID, XnUSBDeviceCallbackFunctionPtr pFunc, void* pCookie, XnRegistrationHandle* phRegistration);
 XN_C_API void XN_C_DECL xnUSBUnregisterFromConnectivityEvents(XnRegistrationHandle hRegistration);
 
+#ifdef __ANDROID__
+XN_C_API void xnAndroidUSBDeviceConnected(XnUInt16 vendorID, XnUInt16 productID, XnInt32 fd, const XnChar *strDevicePath);
+#endif
+
 #endif //_XN_USB_H_

@@ -28,6 +28,7 @@
 #include "../Sensor/XnSensor.h"
 #include "../Sensor/XnDeviceEnumeration.h"
 #include <XnLogWriterBase.h>
+#include <OniCTypes.h>
 
 //---------------------------------------------------------------------------
 // XnOniDriver class
@@ -276,4 +277,14 @@ void XN_CALLBACK_TYPE XnOniDriver::OnDeviceDisconnected(const OniDeviceInfo& dev
 {
 	XnOniDriver* pThis = (XnOniDriver*)pCookie;
 	pThis->deviceDisconnected(&deviceInfo);
+}
+
+OniStatus XnOniDriver::tryDevice(const char *uri) {
+	for (xnl::StringsHash<XnOniDevice*>::Iterator iter = m_devices.Begin(); iter != m_devices.End(); ++iter)
+	{
+		if (xnOSStrCmp(iter->Value()->GetInfo()->uri, uri) == 0)
+			return ONI_STATUS_OK;
+	}
+
+	return ONI_STATUS_ERROR;
 }

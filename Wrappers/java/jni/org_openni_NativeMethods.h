@@ -564,6 +564,9 @@ JNIEXPORT jint JNICALL Java_org_openni_NativeMethods_oniSetLogFileOutput
 JNIEXPORT jint JNICALL Java_org_openni_NativeMethods_oniSetLogAndroidOutput
   (JNIEnv *, jclass, jboolean);
 
+JNIEXPORT jint JNICALL Java_org_openni_NativeMethods_oniRegisterAndroidDevice
+        (JNIEnv *, jclass, jint, jint, jint, jstring);
+
 #ifdef __cplusplus
 }
 #endif

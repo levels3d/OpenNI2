@@ -86,6 +86,10 @@ DriverHandler::DriverHandler(const char* library, xnl::ErrorLogger& errorLogger)
 	OniGetProcAddress(oniDriverEnableFrameSync);
 	OniGetProcAddress(oniDriverDisableFrameSync);
 
+#ifdef ANDROID
+	OniGetProcAddress(oniDriverRegisterAndroidDevice);
+#endif
+
 	m_valid = true;
 }
 

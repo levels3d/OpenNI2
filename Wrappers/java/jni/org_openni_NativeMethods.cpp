@@ -838,3 +838,22 @@ JNIEXPORT jint JNICALL Java_org_openni_NativeMethods_oniSetLogAndroidOutput
 	return ONI_STATUS_NOT_SUPPORTED;
 #endif
 }
+
+JNIEXPORT jint JNICALL Java_org_openni_NativeMethods_oniRegisterAndroidDevice
+		(JNIEnv * env, jclass, jint vendorID, jint productID, jint fd, jstring devicePath)
+{
+	(void)(vendorID);
+	(void)(productID);
+	(void)(fd);
+	(void)(devicePath);
+#ifdef ANDROID
+	const char * path = env->GetStringUTFChars(devicePath, JNI_FALSE);
+	return oniRegisterAndroidDevice(
+			static_cast<unsigned short>(vendorID),
+			static_cast<unsigned short>(productID),
+			fd, path
+	);
+#else
+	return ONI_STATUS_NOT_SUPPORTED;
+#endif
+}
