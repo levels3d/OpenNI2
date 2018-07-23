@@ -839,6 +839,7 @@ XnStatus XnSensorImageStream::CreateDataProcessor(XnDataProcessor** ppProcessor)
 
 	XnStreamProcessor* pNew;
 
+#ifndef ANDROID
 	switch (m_InputFormat.GetValue())
 	{
 	case XN_IO_IMAGE_FORMAT_BAYER:
@@ -862,6 +863,7 @@ XnStatus XnSensorImageStream::CreateDataProcessor(XnDataProcessor** ppProcessor)
 		}
 		break;
 	case XN_IO_IMAGE_FORMAT_UNCOMPRESSED_YUV422:
+#endif
 		if (GetOutputFormat() == ONI_PIXEL_FORMAT_YUV422)
 		{
 			XN_VALIDATE_NEW_AND_INIT(pNew, XnPassThroughImageProcessor, this, &m_Helper, pBufferManager);
@@ -874,6 +876,7 @@ XnStatus XnSensorImageStream::CreateDataProcessor(XnDataProcessor** ppProcessor)
 		{
 			XN_LOG_WARNING_RETURN(XN_STATUS_BAD_PARAM, XN_MASK_DEVICE_SENSOR, "invalid output format %d!", pBufferManager);
 		}
+#ifndef ANDROID
 		break;
 	case XN_IO_IMAGE_FORMAT_UNCOMPRESSED_YUYV:
 		if (GetOutputFormat() == ONI_PIXEL_FORMAT_YUYV)
@@ -895,6 +898,7 @@ XnStatus XnSensorImageStream::CreateDataProcessor(XnDataProcessor** ppProcessor)
 	default:
 		return XN_STATUS_IO_INVALID_STREAM_IMAGE_FORMAT;
 	}
+#endif
 
 	*ppProcessor = pNew;
 

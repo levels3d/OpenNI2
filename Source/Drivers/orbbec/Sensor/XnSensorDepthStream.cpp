@@ -915,6 +915,7 @@ XnStatus XnSensorDepthStream::CreateDataProcessor(XnDataProcessor** ppProcessor)
 
 	XnStreamProcessor* pNew;
 
+#ifndef ANDROID
 	switch (m_InputFormat.GetValue())
 	{
 	case XN_IO_DEPTH_FORMAT_UNCOMPRESSED_16_BIT:
@@ -924,7 +925,9 @@ XnStatus XnSensorDepthStream::CreateDataProcessor(XnDataProcessor** ppProcessor)
 		XN_VALIDATE_NEW_AND_INIT(pNew, XnPSCompressedDepthProcessor, this, &m_Helper, pBufferManager);
 		break;
 	case XN_IO_DEPTH_FORMAT_UNCOMPRESSED_11_BIT:
+#endif
 		XN_VALIDATE_NEW_AND_INIT(pNew, XnPacked11DepthProcessor, this, &m_Helper, pBufferManager);
+#ifndef ANDROID
 		break;
 	case XN_IO_DEPTH_FORMAT_UNCOMPRESSED_12_BIT:
 		XN_VALIDATE_NEW_AND_INIT(pNew, XnPacked12DepthProcessor, this, &m_Helper, pBufferManager);
@@ -932,6 +935,7 @@ XnStatus XnSensorDepthStream::CreateDataProcessor(XnDataProcessor** ppProcessor)
 	default:
 		return XN_STATUS_IO_INVALID_STREAM_DEPTH_FORMAT;
 	}
+#endif
 
 	*ppProcessor = pNew;
 
